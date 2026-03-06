@@ -13,6 +13,7 @@ This project demonstrates how to build a **serverless data lake architecture on 
 - Architecture
 - Tech Stack
 - Data Pipeline
+- Pipeline Orchestration
 - Project Structure
 - Example Query
 - Key Implementations
@@ -89,6 +90,23 @@ Partitioned Tables (year/month)
 Athena SQL Analytics
 
 ---
+## Pipeline Orchestration
+
+In a production environment, the data pipeline would be orchestrated using tools such as:
+
+- Apache Airflow
+- AWS Glue Workflows
+- AWS Step Functions
+
+The pipeline stages would be:
+
+1. Data ingestion to S3 (Raw Layer)
+2. Transformation using Athena CTAS
+3. Conversion to Parquet format
+4. Partitioning optimized datasets
+5. Analytical queries for reporting
+
+---
 
 # Project Structure
 
@@ -99,6 +117,7 @@ aws-serverless-data-lake-athena
 │
 ├── pipeline
 │ data_pipeline_explanation.md
+| athena_pipeline.sql
 │
 ├── sql
 │ create_external_tables.sql
