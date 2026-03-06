@@ -109,7 +109,7 @@ The pipeline stages would be:
 ---
 
 # Project Structure
-
+```
 aws-serverless-data-lake-athena
 │
 ├── architecture
@@ -129,7 +129,7 @@ aws-serverless-data-lake-athena
 │ dataset_description.md
 │
 └── README.md
-
+```
 
 ---
 
