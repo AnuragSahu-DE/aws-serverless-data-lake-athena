@@ -1,52 +1,156 @@
 # AWS Serverless Data Lake Analytics – Pizza Sales Dataset
 
-This project demonstrates how to build a serverless data lake architecture on AWS for performing scalable SQL analytics on raw datasets.
+![AWS](https://img.shields.io/badge/AWS-S3%20%7C%20Athena%20%7C%20Glue-orange)
+![SQL](https://img.shields.io/badge/SQL-Athena-blue)
+![Architecture](https://img.shields.io/badge/Architecture-Data%20Lake-green)
 
-## Data Lake Architecture
+This project demonstrates how to build a **serverless data lake architecture on AWS** for performing scalable SQL analytics on raw datasets using **Amazon S3, Amazon Athena, and AWS Glue Data Catalog**.
 
-This project implements a **three-layer data lake architecture**:
+---
 
-Bronze Layer  
-Raw CSV files stored in Amazon S3.
+# Table of Contents
 
-Silver Layer  
-Data transformed into columnar Parquet format using Athena CTAS.
+- Architecture
+- Tech Stack
+- Data Pipeline
+- Project Structure
+- Example Query
+- Key Implementations
+- Key Learnings
 
-Gold Layer  
-Partitioned tables optimized for analytical queries.
+---
 
-This design improves query performance and reduces scan costs in Athena.
+# Architecture
+
+This project implements a **three-layer data lake architecture (Medallion Architecture)**.
+
+### Bronze Layer – Raw Data
+Raw CSV files are stored in **Amazon S3**.
+
+Example datasets:
+- orders.csv
+- order_details.csv
+- pizzas.csv
+- pizza_types.csv
+
+Purpose:
+- Raw ingestion layer
+- Source-of-truth data
+- No transformation applied
+
+---
+
+### Silver Layer – Processed Data
+Data is converted from **CSV → Parquet** using **Athena CTAS queries**.
+
+Benefits:
+- Columnar storage format
+- Faster query performance
+- Reduced data scan cost
+
+---
+
+### Gold Layer – Optimized Analytics
+Processed data is further optimized using **partitioning (year/month)**.
+
+Benefits:
+- Query pruning
+- Faster execution
+- Reduced Athena query cost
+
+---
 
 ![Architecture](architecture/architecture.png)
 
-## Tech Stack
+---
 
-- Amazon S3 – Data Lake Storage
-- Amazon Athena – Serverless SQL Analytics
-- AWS Glue Data Catalog – Metadata management
-- SQL – Data transformation and analytics
+# Tech Stack
 
-## Data Pipeline
+- **Amazon S3** – Data lake storage
+- **Amazon Athena** – Serverless SQL analytics
+- **AWS Glue Data Catalog** – Metadata and table definitions
+- **SQL** – Data transformations and analytics
+- **Parquet** – Columnar storage format for optimized queries
 
-Raw CSV Data → Amazon S3 → Athena External Tables → Parquet Optimization → Partitioned Analytics Tables
+---
 
-## Key Implementations
+# Data Pipeline
 
-• Created external tables in Amazon Athena to query S3 datasets using schema-on-read  
-• Converted raw CSV datasets to columnar Parquet format using Athena CTAS  
-• Implemented partitioning (year/month) to optimize query performance  
-• Performed analytical SQL queries including joins and aggregations  
+Raw CSV Data  
+↓  
+Amazon S3 (Raw Data Lake)  
+↓  
+Athena External Tables (Schema-on-read)  
+↓  
+Athena CTAS Transformation (CSV → Parquet)  
+↓  
+Partitioned Tables (year/month)  
+↓  
+Athena SQL Analytics
 
-## Example Query
+---
+
+# Project Structure
+
+aws-serverless-data-lake-athena
+│
+├── architecture
+│ aws-data-lake-architecture.png
+│
+├── pipeline
+│ data_pipeline_explanation.md
+│
+├── sql
+│ create_external_tables.sql
+│ convert_csv_to_parquet.sql
+│ partitioned_table.sql
+│ analytics_queries.sql
+│
+├── dataset_info
+│ dataset_description.md
+│
+└── README.md
+
+
+---
+
+# Key Implementations
+
+- Created **external tables in Amazon Athena** to query S3 datasets using schema-on-read
+- Converted raw CSV datasets into **columnar Parquet format** using Athena CTAS
+- Implemented **partitioned tables (year/month)** to optimize query performance
+- Performed analytical SQL queries including **joins, aggregations, and revenue analysis**
+
+---
+
+# Example Query
 
 ```sql
 SELECT
-pt.category,
-SUM(od.quantity * p.price) AS revenue
+    pt.category,
+    SUM(od.quantity * p.price) AS revenue
 FROM order_details od
 JOIN pizzas p
-ON od.pizza_id = p.pizza_id
+    ON od.pizza_id = p.pizza_id
 JOIN pizza_types pt
-ON p.pizza_type_id = pt.pizza_type_id
+    ON p.pizza_type_id = pt.pizza_type_id
 GROUP BY pt.category
 ORDER BY revenue DESC;
+```
+
+### Key Learnings
+
+Implemented a serverless data lake architecture on AWS
+
+Queried raw data directly from S3 using Athena external tables
+
+Optimized analytics performance using Parquet columnar storage
+
+Reduced Athena scan costs using data partitioning
+
+Designed a Medallion-style data pipeline (Bronze → Silver → Gold)
+
+
+---
+
+
