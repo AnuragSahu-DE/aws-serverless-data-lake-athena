@@ -17,7 +17,7 @@ Partitioned tables optimized for analytical queries.
 
 This design improves query performance and reduces scan costs in Athena.
 
-![Architecture](architecture/aws-data-lake-architecture.png)
+![Architecture](architecture/architecture.png)
 
 ## Tech Stack
 
